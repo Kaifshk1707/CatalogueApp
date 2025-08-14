@@ -5,7 +5,7 @@ export default function ProductCard({ product, onPress }) {
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: '#E3F7F8',
         borderRadius: 10,
         padding: 10,
         flex: 1,

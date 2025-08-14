@@ -12,12 +12,14 @@ import ProductDetailsScreen from './src/screens/ProductDetailsScreen';
 import CategoriesScreen from './src/screens/CategoriesScreen';
 import RatesScreen from './src/screens/RatesScreen';
 import SelectionListScreen from './src/screens/SelectionListScreen';
+import { StatusBar } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
+      <StatusBar backgroundColor="transparent" barStyle="light-content" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         
         <Stack.Screen name="Splash" component={SplashScreen} />

@@ -1,8 +1,20 @@
-import React from "react";
-import { View, FlatList, Text } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  SafeAreaView,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons"; // for search icon
 import ProductCard from "../components/ProductCard";
+import { StatusBar } from "expo-status-bar";
 
 export default function ProductListScreen({ navigation }) {
+  const [searchVisible, setSearchVisible] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
   const products = [
     {
       id: "1",
@@ -34,6 +46,11 @@ export default function ProductListScreen({ navigation }) {
     },
   ];
 
+  // Filter products based on search
+  const filteredProducts = products.filter((item) =>
+    item.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <View
       style={{
@@ -43,21 +60,49 @@ export default function ProductListScreen({ navigation }) {
         paddingTop: 20,
       }}
     >
-      {/* Screen Title */}
-      <Text
+      {/* Header */}
+      <View
         style={{
-          fontSize: 24,
-          fontWeight: "700",
-          color: "#333",
-          marginBottom: 15,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: "#45C7CF",
+          padding: "2%",
         }}
       >
-       Trending Products
-      </Text>
+        <Text style={{ fontSize: 24, fontWeight: "700", color: "#333" }}>
+          Trending Products
+        </Text>
+
+        <TouchableOpacity onPress={() => setSearchVisible(!searchVisible)}>
+          <Ionicons name="search" size={24} color="#333" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Search Bar */}
+      {searchVisible && (
+        <TextInput
+          value={searchText}
+          onChangeText={setSearchText}
+          placeholder="Search products..."
+          placeholderTextColor="#888"
+          style={{
+            fontSize: 16,
+            color: "#333",
+            backgroundColor: "#E3F7F8",
+            paddingHorizontal: 15,
+            paddingVertical: 8,
+            borderWidth: 1,
+            borderColor: "#ddd",
+            borderRadius: 8,
+            marginTop: 10,
+          }}
+        />
+      )}
 
       {/* Product Grid */}
       <FlatList
-        data={products}
+        data={filteredProducts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ProductCard
@@ -67,11 +112,8 @@ export default function ProductListScreen({ navigation }) {
             }
           />
         )}
-        numColumns={2} // Grid View
-        columnWrapperStyle={{
-          justifyContent: "space-between",
-          marginBottom: 15,
-        }}
+        numColumns={2}
+        columnWrapperStyle={{ justifyContent: "space-between", marginTop: 15 }}
         showsVerticalScrollIndicator={false}
       />
     </View>
