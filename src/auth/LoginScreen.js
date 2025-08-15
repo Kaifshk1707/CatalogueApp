@@ -1,17 +1,20 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-  Image,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, Pressable } from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function LoginScreen({ navigation }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log("Form Data:", data);
+  };
 
   return (
     <View
@@ -22,69 +25,103 @@ export default function LoginScreen({ navigation }) {
         backgroundColor: "#45C7CF",
       }}
     >
-      {/* Title */}
+      {/* Logo */}
       <Image
         source={require("./../assets/images/nikitaLogo.jpeg")}
         style={{
-          width: 200, // bigger size
+          width: 200,
           height: 200,
-          // marginBottom: 30, // more space below
-          alignSelf: "center", // center horizontally
+          marginBottom: 30,
+          alignSelf: "center",
         }}
-        resizeMode="contain" // keeps aspect ratio without stretching
+        resizeMode="contain"
       />
 
-      {/* Username Input */}
-      <TextInput
-        placeholder="Username"
-        placeholderTextColor="#888"
-        value={username}
-        onChangeText={setUsername}
-        style={{
-          borderWidth: 1,
-          borderColor: "#ccc",
-          padding: 14,
-          marginBottom: 15,
-          borderRadius: 8,
-          backgroundColor: "#E3F7F8",
-          fontSize: 16,
-          color: "#333",
+      {/* Username */}
+      <Controller
+        control={control}
+        name="username"
+        rules={{
+          required: "Username is required",
+          minLength: { value: 4, message: "Minimum 4 characters required" },
+          maxLength: { value: 20, message: "Maximum 20 characters" },
         }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            placeholder="Username"
+            placeholderTextColor="#888"
+            onChangeText={onChange}
+            onBlur={onBlur}
+            value={value}
+            style={{
+              borderWidth: errors.username ? 2 : 1,
+              borderColor: errors.username ? "red" : "#ccc",
+              padding: 14,
+              marginBottom: 5,
+              borderRadius: 8,
+              backgroundColor: "#E3F7F8",
+              fontSize: 16,
+              color: "#333",
+            }}
+          />
+        )}
       />
+      {errors.username && (
+        <Text style={{ color: "red", marginBottom: 10 }}>
+          {errors.username.message}
+        </Text>
+      )}
 
-      {/* Password Input */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          borderWidth: 1,
-          borderColor: "#ccc",
-          borderRadius: 8,
-          backgroundColor: "#E3F7F8",
-          marginBottom: 15,
-          paddingRight: 10,
+      {/* Password */}
+      <Controller
+        control={control}
+        name="password"
+        rules={{
+          required: "Password is required",
+          minLength: { value: 6, message: "Minimum 6 characters" },
         }}
-      >
-        <TextInput
-          placeholder="Password"
-          placeholderTextColor="#888"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!showPassword}
-          style={{
-            flex: 1,
-            padding: 14,
-            fontSize: 16,
-            color: "#333",
-            backgroundColor:"#E3F7F8"
-          }}
-        />
-        <Pressable onPress={() => setShowPassword(!showPassword)}>
-          <Text style={{ color: "#45C7CF", fontWeight: "600" }}>
-            {showPassword ? "Hide" : "Show"}
-          </Text>
-        </Pressable>
-      </View>
+        render={({ field: { onChange, onBlur, value } }) => (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              borderWidth: errors.password ? 2 : 1,
+              borderColor: errors.password ? "red" : "#ccc",
+              borderRadius: 8,
+              backgroundColor: "#E3F7F8",
+              marginBottom: 5,
+              paddingRight: 10,
+            }}
+          >
+            <TextInput
+              placeholder="Password"
+              placeholderTextColor="#888"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              secureTextEntry={!showPassword}
+              style={{
+                flex: 1,
+                padding: 14,
+                fontSize: 16,
+                color: "#333",
+              }}
+            />
+            <Pressable onPress={() => setShowPassword(!showPassword)}>
+              <Ionicons
+                name={showPassword ? "eye" : "eye-off"}
+                size={24}
+                color="#45C7CF"
+              />
+            </Pressable>
+          </View>
+        )}
+      />
+      {errors.password && (
+        <Text style={{ color: "red", marginBottom: 10 }}>
+          {errors.password.message}
+        </Text>
+      )}
 
       {/* Login Button */}
       <TouchableOpacity
@@ -97,7 +134,7 @@ export default function LoginScreen({ navigation }) {
           shadowRadius: 4,
           elevation: 3,
         }}
-        onPress={() => navigation.replace("ProductList")}
+        onPress={handleSubmit(onSubmit)}
       >
         <Text
           style={{
@@ -126,7 +163,6 @@ export default function LoginScreen({ navigation }) {
             color: "#111111",
             fontWeight: "600",
             fontSize: 16,
-            marginLeft: 5,
             textDecorationLine: "underline",
           }}
           onPress={() => navigation.navigate("SignUp")}

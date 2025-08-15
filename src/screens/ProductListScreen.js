@@ -7,7 +7,7 @@ import {
   TextInput,
   SafeAreaView,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // for search icon
+import { Ionicons } from "@expo/vector-icons"; 
 import ProductCard from "../components/ProductCard";
 import { StatusBar } from "expo-status-bar";
 
