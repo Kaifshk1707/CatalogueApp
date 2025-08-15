@@ -3,10 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/auth/LoginScreen';
 import SignUpScreen from './src/auth/SignUpScreen';
-import SplashScreen from './src/auth/SplashScreen';
-import SplashOne from './src/auth/SplashOne';
-import SplashTwo from './src/auth/SplashTwo';
-import SplashThree from './src/auth/SplashThree';
+import GetStarted from './src/auth/GetStarted';
+import SplashPage from './src/auth/SplashPage';
 import ProductListScreen from './src/screens/ProductListScreen';
 import ProductDetailsScreen from './src/screens/ProductDetailsScreen';
 import CategoriesScreen from './src/screens/CategoriesScreen';
@@ -21,11 +19,8 @@ export default function App() {
     <NavigationContainer>
       <StatusBar backgroundColor="transparent" barStyle="light-content" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        
-        <Stack.Screen name="Splash" component={SplashScreen} />
-        <Stack.Screen name="SplashOne" component={SplashOne} />
-        <Stack.Screen name="SplashTwo" component={SplashTwo} />
-        <Stack.Screen name="SplashThree" component={SplashThree} />
+        <Stack.Screen name="Started" component={GetStarted} />
+        <Stack.Screen name="SplashPage" component={SplashPage} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="ProductList" component={ProductListScreen} />

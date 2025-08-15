@@ -1,75 +1,73 @@
-import {
-  View,
-  Text,
-  ImageBackground,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
+import { View, Image, TouchableOpacity, Text, Dimensions } from "react-native";
+
 const { height, width } = Dimensions.get("window");
-const SplashThree = ({ navigation }) => {
+
+const SplashScreen = ({ navigation }) => {
+
   return (
     <View
       style={{
         flex: 1,
+        backgroundColor: "#45C7CF", // Primary color
         justifyContent: "center",
         alignItems: "center",
-        padding: 20,
-        backgroundColor: "#45C7CF",
+        paddingHorizontal: 20,
+        position: "relative",
       }}
     >
-      {/* Logo / Icon */}
+      {/* Logo */}
       <Image
         source={require("./../assets/images/nikitaLogo.jpeg")}
         style={{
           width: width * 0.6,
           height: height * 0.3,
-          marginBottom: -40,
+          marginBottom: 20,
         }}
         resizeMode="contain"
       />
 
-      <View
+      {/* Skip Button */}
+      <TouchableOpacity
         style={{
-          padding: 20,
-          borderRadius: 10,
+          position: "absolute",
+          top: 50,
+          right: 0,
+          zIndex: 1,
+
+          backgroundColor: "#45C7CF",
+          paddingVertical: 8,
+          paddingHorizontal: 36,
+          borderRadius: 20,
         }}
+        onPress={() => navigation.navigate("Login")}
       >
         <Text
           style={{
-            fontSize: 26,
-            fontWeight: "bold",
             color: "#111111",
-            textAlign: "center",
-            marginBottom: 10,
-          }}
-        >
-          Jewelry Tailored for Every Occasion
-        </Text>
-        <Text
-          style={{
             fontSize: 22,
-            color: "#111111",
-            textAlign: "center",
-            lineHeight: 22,
+            fontWeight: "bold",
+            textDecorationLine: "underline",
           }}
         >
-          From weddings and proposals to anniversaries and devotional events
+          Skip
         </Text>
-      </View>
+      </TouchableOpacity>
 
+      {/* Next Button */}
       <TouchableOpacity
-        onPress={() => navigation.navigate("Login")}
+        onPress={() => navigation.navigate("SplashPage")}
         style={{
           position: "absolute",
           bottom: 40,
           right: 20,
           zIndex: 1,
+
           backgroundColor: "#45C7CF",
           paddingVertical: 4,
           paddingHorizontal: 16,
           borderRadius: 20,
+
         }}
       >
         <Text
@@ -87,4 +85,4 @@ const SplashThree = ({ navigation }) => {
   );
 };
 
-export default SplashThree;
+export default SplashScreen;
