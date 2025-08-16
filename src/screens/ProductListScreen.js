@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   TextInput,
   SafeAreaView,
+  Image,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; 
+import { Ionicons } from "@expo/vector-icons";
 import ProductCard from "../components/ProductCard";
 import { StatusBar } from "expo-status-bar";
+import BannerComponent from "../components/BannerComponent";
 
 export default function ProductListScreen({ navigation }) {
   const [searchVisible, setSearchVisible] = useState(false);
@@ -51,6 +53,61 @@ export default function ProductListScreen({ navigation }) {
     item.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  const HeaderComponent = () => {
+    return (
+      <>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            backgroundColor: "#45C7CF",
+            padding: "2%",
+            borderRadius: 5,
+            marginTop:"6%"
+          }}
+        >
+          <TouchableOpacity>
+            <Ionicons name="menu" size={28} color="#333" />
+          </TouchableOpacity>
+
+          <Image
+            source={require("./../assets/images/Nikita_Icon.png")}
+            style={{ width: 60, height: 60 }}
+          />
+          {/* <Text style={{ fontSize: 24, fontWeight: "bold", color: "#333" }}>
+            Nikita
+          </Text> */}
+
+          <TouchableOpacity onPress={() => setSearchVisible(!searchVisible)}>
+            <Ionicons name="search" size={28} color="#333" />
+          </TouchableOpacity>
+        </View>
+
+        {/* Search Bar */}
+        {searchVisible && (
+          <TextInput
+            value={searchText}
+            onChangeText={setSearchText}
+            placeholder="Search products..."
+            placeholderTextColor="#888"
+            style={{
+              fontSize: 16,
+              color: "#333",
+              backgroundColor: "#E3F7F8",
+              paddingHorizontal: 15,
+              paddingVertical: 8,
+              borderWidth: 1,
+              borderColor: "#ddd",
+              borderRadius: 8,
+              marginTop: 10,
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
   return (
     <View
       style={{
@@ -61,44 +118,10 @@ export default function ProductListScreen({ navigation }) {
       }}
     >
       {/* Header */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          backgroundColor: "#45C7CF",
-          padding: "2%",
-        }}
-      >
-        <Text style={{ fontSize: 24, fontWeight: "700", color: "#333" }}>
-          Trending Products
-        </Text>
+      <HeaderComponent />
 
-        <TouchableOpacity onPress={() => setSearchVisible(!searchVisible)}>
-          <Ionicons name="search" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Search Bar */}
-      {searchVisible && (
-        <TextInput
-          value={searchText}
-          onChangeText={setSearchText}
-          placeholder="Search products..."
-          placeholderTextColor="#888"
-          style={{
-            fontSize: 16,
-            color: "#333",
-            backgroundColor: "#E3F7F8",
-            paddingHorizontal: 15,
-            paddingVertical: 8,
-            borderWidth: 1,
-            borderColor: "#ddd",
-            borderRadius: 8,
-            marginTop: 10,
-          }}
-        />
-      )}
+      {/* Banner Component */}
+      <BannerComponent />
 
       {/* Product Grid */}
       <FlatList

@@ -14,6 +14,7 @@ export default function LoginScreen({ navigation }) {
 
   const onSubmit = (data) => {
     console.log("Form Data:", data);
+    navigation.navigate("ProductList");
   };
 
   return (

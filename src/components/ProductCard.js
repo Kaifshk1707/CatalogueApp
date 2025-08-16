@@ -13,7 +13,9 @@ export default function ProductCard({ product, onPress }) {
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        elevation: 3
+        elevation: 3,
+        marginBottom: "1%",
+        gap: 10,
       }}
       onPress={onPress}
       activeOpacity={0.8}
@@ -21,10 +23,11 @@ export default function ProductCard({ product, onPress }) {
       <Image
         source={{ uri: product.image }}
         style={{
-          width: '100%',
-          height: 120,
+          width: '111.5%',
+          height: 250,
           borderRadius: 8,
-          marginBottom: 8
+          marginBottom: 8,
+          alignSelf: 'center'
         }}
       />
       <Text style={{ fontSize: 16, fontWeight: '600', color: '#333' }}>

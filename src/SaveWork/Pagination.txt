@@ -1,0 +1,23 @@
+  {/* Pagination Dots */}
+            <View
+                style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    position: "absolute",
+                    bottom: 10,
+                    width: "100%",
+                }}
+            >
+                {images.map((_, index) => (
+                    <View
+                        key={index}
+                        style={{
+                            height: 8,
+                            width: 8,
+                            borderRadius: 4,
+                            margin: 5,
+                            backgroundColor: currentIndex === index ? "white" : "gray",
+                        }}
+                    />
+                ))}
+            </View>
