@@ -23,7 +23,7 @@ export default function ProductCard({ product, onPress }) {
       <Image
         source={{ uri: product.image }}
         style={{
-          width: '111.5%',
+          width: '105%',
           height: 250,
           borderRadius: 8,
           marginBottom: 8,
