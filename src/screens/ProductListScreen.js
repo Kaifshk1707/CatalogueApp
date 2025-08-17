@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -10,22 +10,91 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import ProductCard from "../components/ProductCard";
 import BannerComponent from "../components/BannerComponent";
-import products from "../LocalData/products";
+import { getRequest } from "../api/apiService";
 
 export default function ProductListScreen({ navigation }) {
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
-
+  const [all, setAll] = useState([]);
+  const [gold, setGold] = useState([]);
+  const [diamond, setDiamond] = useState([]);
+  const [silver, setSilver] = useState([]);
+  const [platinum, setPlatinum] = useState([]);
   const categories = ["All", "Gold", "Diamond", "Silver", "Platinum"];
 
+
+  const fetchAll = async () => {
+    try {
+      const data = await getRequest("all");
+      setAll(data);
+    } catch (error) {
+      console.log("API call failed:", error.message);
+    }
+  }
+
+  const fetchGold = async () => {
+    try {
+      const data = await getRequest("gold");
+      setGold(data);
+    } catch (error) {
+      console.log("API call failed:", error.message);
+    }
+  };
+
+  const fetchDiamond = async () => {
+    try {
+      const data = await getRequest("diamond");
+      setDiamond(data);
+    } catch (error) {
+      console.log("API call failed:", error.message);
+    }
+  };
+
+  const fetchSilver = async () => {
+    try {
+      const data = await getRequest("silver");
+      setSilver(data);
+    } catch (error) {
+      console.log("API call failed:", error.message);
+    }
+  };
+
+  const fetchPlatinum = async () => {
+    try {
+      const data = await getRequest("platinum");
+      setPlatinum(data);
+    } catch (error) {
+      console.log("API call failed:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchAll();
+    fetchGold();
+    fetchDiamond();
+    fetchSilver();
+    fetchPlatinum();
+  }, []);
+
   //  Search + Category Filter
-  const filteredProducts = products.filter(
-    (item) =>
-      (selectedCategory === "All" ||
-        item.name.toLowerCase().includes(selectedCategory.toLowerCase())) &&
-      item.name.toLowerCase().includes(searchText.toLowerCase())
+  let categoryData = [];
+  if (selectedCategory === "All") {
+    categoryData = all;
+  } else if (selectedCategory === "Gold") {
+    categoryData = gold;
+  } else if (selectedCategory === "Diamond") {
+    categoryData = diamond;
+  } else if (selectedCategory === "Silver") {
+    categoryData = silver;
+  } else if (selectedCategory === "Platinum") {
+    categoryData = platinum;
+  }
+
+  // 🔑 Apply Search Filter also
+  const filteredProducts = categoryData.filter((item) =>
+    item.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const HeaderComponent = () => {
@@ -128,8 +197,8 @@ export default function ProductListScreen({ navigation }) {
       style={{
         flex: 1,
         backgroundColor: "#fff",
-        paddingHorizontal: 15,
-        paddingTop: 20,
+        // paddingHorizontal: 15,
+        paddingTop: 10,
       }}
     >
       {/* Header */}
@@ -139,21 +208,28 @@ export default function ProductListScreen({ navigation }) {
       <BannerComponent />
 
       {/* Product Grid */}
-      <FlatList
-        data={filteredProducts}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <ProductCard
-            product={item}
-            onPress={() =>
-              navigation.navigate("ProductDetails", { product: item })
-            }
-          />
-        )}
-        numColumns={2}
-        columnWrapperStyle={{ justifyContent: "space-between", marginTop: 15 }}
-        showsVerticalScrollIndicator={false}
-      />
+      <View style={{
+        flex: 1, 
+        width: "100%",
+        borderTopWidth: 2,
+        borderTopColor: "#45CFC7",
+      }}>
+        <FlatList
+          data={filteredProducts}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <ProductCard
+              product={item}
+              onPress={() =>
+                navigation.navigate("ProductDetails", { product: item })
+              }
+            />
+          )}
+          numColumns={2}
+          columnWrapperStyle={{ justifyContent: "space-between", marginTop: 15, marginHorizontal: 10 }}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
     </View>
   );
 }

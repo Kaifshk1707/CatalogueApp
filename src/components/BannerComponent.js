@@ -26,7 +26,7 @@ const BannerComponent = () => {
     }, [currentIndex]);
 
     return (
-        <View style={{ height: 200, }}>
+        <View style={{ height: 200,  margin: 5 }}>
             <FlatList
                 data={images}
                 ref={flatListRef}
