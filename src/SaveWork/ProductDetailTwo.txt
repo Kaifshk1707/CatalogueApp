@@ -1,0 +1,157 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+const { width } = Dimensions.get("window");
+
+export default function ProductDetailsScreen({ navigation }) {
+  const [status, setStatus] = useState("Ready"); // or Sold
+
+  return (
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      {/* Header */}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          padding: 15,
+          backgroundColor: "#9FA8DA",
+        }}
+      >
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={22} color="#fff" />
+        </TouchableOpacity>
+        <Text style={{ color: "#fff", fontSize: 18, marginLeft: 10 }}>
+          Product Details
+        </Text>
+      </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ padding: 15 }}
+      >
+        {/* Product Images */}
+        <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
+          {[1, 2, 3].map((item, i) => (
+            <Image
+              key={i}
+              source={require(`./../assets/images/Img1.jpg`)}
+              style={{
+                width: width - 30,
+                height: 250,
+                borderRadius: 12,
+                marginRight: 10,
+              }}
+              resizeMode="cover"
+            />
+          ))}
+        </ScrollView>
+
+        {/* Basic Details */}
+        <View style={{ marginTop: 15 }}>
+          <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+            Gold Necklace - 22K
+          </Text>
+          <Text style={{ fontSize: 14, color: "#555" }}>Category: Necklace</Text>
+          <Text style={{ fontSize: 14, color: "#555" }}>
+            Location: Mumbai Branch
+          </Text>
+          <Text
+            style={{
+              marginTop: 5,
+              color: status === "Ready" ? "green" : "red",
+              fontWeight: "600",
+            }}
+          >
+            Status: {status === "Ready" ? "Ready (In Store)" : "Sold (Order Only)"}
+          </Text>
+        </View>
+
+        {/* Price & Weight */}
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>
+            Pricing & Weight Details
+          </Text>
+          <Text>Carat: 22K</Text>
+          <Text>Gross Weight: 20 gm</Text>
+          <Text>Net Weight: 19.5 gm</Text>
+          <Text>Making Charges: ₹5,000</Text>
+          <Text>Sale Value: ₹1,20,000</Text>
+          <Text>GST: ₹3,600</Text>
+          <Text style={{ fontWeight: "bold", marginTop: 5 }}>
+            Final Price: ₹1,23,600
+          </Text>
+        </View>
+
+        {/* Diamond Details */}
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>
+            Diamond Details
+          </Text>
+          <Text>Shape: Round</Text>
+          <Text>Size: 2 mm</Text>
+          <Text>Weight: 0.25 ct</Text>
+          <Text>Pieces: 10</Text>
+          <Text>Color: D</Text>
+          <Text>Clarity: VVS1</Text>
+          <Text>Rate: ₹50,000/ct</Text>
+          <Text>Amount: ₹12,500</Text>
+        </View>
+
+        {/* Stone Details */}
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>
+            Stone Details
+          </Text>
+          <Text>Type: Ruby</Text>
+          <Text>Shape: Oval</Text>
+          <Text>Weight: 1.5 gm</Text>
+          <Text>Carat: 2 ct</Text>
+          <Text>Rate: ₹10,000/ct</Text>
+          <Text>Amount: ₹20,000</Text>
+        </View>
+
+        {/* Actions */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
+            marginTop: 30,
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#9FA8DA",
+              padding: 12,
+              borderRadius: 10,
+              flex: 1,
+              marginRight: 10,
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ color: "#fff", fontWeight: "600" }}>Share</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#4CAF50",
+              padding: 12,
+              borderRadius: 10,
+              flex: 1,
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ color: "#fff", fontWeight: "600" }}>Add to List</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
+  );
+}

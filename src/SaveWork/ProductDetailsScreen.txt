@@ -1,0 +1,189 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  TextInput,
+  Share,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+export default function ProductDetailsScreen({ navigation }) {
+  const [selected, setSelected] = useState([]);
+  const [metalRates, setMetalRates] = useState({
+    "24K": 6000,
+    "22K": 5600,
+    "18K": 4500,
+    "14K": 3500,
+  });
+  const [selectedMetal, setSelectedMetal] = useState("22K");
+  const [gst, setGst] = useState(3);
+
+  const product = {
+    id: "1",
+    name: "Gold Necklace",
+    category: "Necklace",
+    type: "Gold",
+    subType: "Bridal",
+    location: "Mumbai",
+    status: "Available",
+    diamond: [{ shape: "Round", weight: "1.2 ct", price: 50000 }],
+    polki: [{ shape: "Uncut", weight: "0.8 ct", price: 30000 }],
+    stones: [{ type: "Ruby", weight: "2 ct", price: 20000 }],
+    media: [
+      "https://placehold.co/400x400.png?text=Necklace+1",
+      "https://placehold.co/400x400.png?text=Necklace+2",
+    ],
+  };
+
+  const toggleSelect = (id) => {
+    let updated = [...selected];
+    if (updated.includes(id)) {
+      updated = updated.filter((x) => x !== id);
+    } else {
+      if (updated.length < 10) {
+        updated.push(id);
+      }
+    }
+    setSelected(updated);
+  };
+
+  const calculatePrice = () => {
+    const base = metalRates[selectedMetal] * 10; // 10gm example
+    const diamonds = product.diamond.reduce((a, b) => a + b.price, 0);
+    const polkis = product.polki.reduce((a, b) => a + b.price, 0);
+    const stones = product.stones.reduce((a, b) => a + b.price, 0);
+    const total = base + diamonds + polkis + stones;
+    return total + (total * gst) / 100;
+  };
+
+  const onShare = async () => {
+    try {
+      await Share.share({
+        message: `Check out this product: ${product.name} - Price: ₹${calculatePrice()}`,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <ScrollView style={{ flex: 1, padding: 10, backgroundColor: "#fff" }}>
+      <Text style={{ fontSize: 22, fontWeight: "bold", marginBottom: 5 }}>
+        {product.name}
+      </Text>
+
+      {/* Media Gallery */}
+      <FlatList
+        horizontal
+        data={product.media}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <Image
+            source={{ uri: item }}
+            style={{ width: 200, height: 200, marginRight: 10, borderRadius: 10 }}
+          />
+        )}
+        style={{ marginVertical: 10 }}
+      />
+
+      {/* Chips */}
+      <View style={{ flexDirection: "row", flexWrap: "wrap", marginBottom: 10 }}>
+        {[product.type, product.category, product.subType, product.location, product.status].map(
+          (chip, index) => (
+            <Text
+              key={index}
+              style={{
+                backgroundColor: "#f0f0f0",
+                padding: 6,
+                borderRadius: 20,
+                margin: 3,
+                fontSize: 12,
+              }}
+            >
+              {chip}
+            </Text>
+          )
+        )}
+      </View>
+
+      {/* Metal Rate Selector */}
+      <Text style={{ fontWeight: "bold", marginBottom: 5 }}>Select Metal:</Text>
+      <View style={{ flexDirection: "row", marginBottom: 10 }}>
+        {Object.keys(metalRates).map((rate) => (
+          <TouchableOpacity
+            key={rate}
+            onPress={() => setSelectedMetal(rate)}
+            style={{
+              padding: 8,
+              borderWidth: 1,
+              borderColor: selectedMetal === rate ? "#2196F3" : "#ccc",
+              borderRadius: 8,
+              marginRight: 10,
+            }}
+          >
+            <Text>{rate}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Diamonds */}
+      <Text style={{ fontWeight: "bold", marginTop: 10 }}>Diamonds:</Text>
+      {product.diamond.map((d, i) => (
+        <Text key={i} style={{ fontSize: 14 }}>
+          {d.shape} - {d.weight} - ₹{d.price}
+        </Text>
+      ))}
+
+      {/* Polki */}
+      <Text style={{ fontWeight: "bold", marginTop: 10 }}>Polki:</Text>
+      {product.polki.map((p, i) => (
+        <Text key={i} style={{ fontSize: 14 }}>
+          {p.shape} - {p.weight} - ₹{p.price}
+        </Text>
+      ))}
+
+      {/* Stones */}
+      <Text style={{ fontWeight: "bold", marginTop: 10 }}>Stones:</Text>
+      {product.stones.map((s, i) => (
+        <Text key={i} style={{ fontSize: 14 }}>
+          {s.type} - {s.weight} - ₹{s.price}
+        </Text>
+      ))}
+
+      {/* GST Input */}
+      <Text style={{ fontWeight: "bold", marginTop: 10 }}>GST %:</Text>
+      <TextInput
+        keyboardType="numeric"
+        value={gst.toString()}
+        onChangeText={(val) => setGst(Number(val))}
+        style={{ borderWidth: 1, borderColor: "#ccc", padding: 6, marginTop: 5 }}
+      />
+
+      {/* Price */}
+      <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 15 }}>
+        Total Price: ₹{calculatePrice()}
+      </Text>
+
+      {/* Share Button */}
+      <TouchableOpacity
+        onPress={onShare}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#2196F3",
+          padding: 10,
+          borderRadius: 8,
+          marginTop: 15,
+        }}
+      >
+        <Ionicons name="share-social" size={20} color="#fff" style={{ marginRight: 5 }} />
+        <Text style={{ color: "#fff" }}>Share</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+}
